@@ -1,22 +1,5 @@
 package uk.gov.companieshouse.missingimagedelivery.orders.api.interceptor;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerMapping;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
-import uk.gov.companieshouse.api.util.security.AuthorisationUtil;
-import uk.gov.companieshouse.logging.Logger;
-import uk.gov.companieshouse.missingimagedelivery.orders.api.model.MissingImageDeliveryItem;
-import uk.gov.companieshouse.missingimagedelivery.orders.api.service.MissingImageDeliveryItemService;
-import uk.gov.companieshouse.missingimagedelivery.orders.api.util.EricHeaderHelper;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -29,8 +12,22 @@ import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.Logg
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.USER_ID_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.getLogger;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.HandlerMapping;
+import uk.gov.companieshouse.api.util.security.AuthorisationUtil;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.missingimagedelivery.orders.api.model.MissingImageDeliveryItem;
+import uk.gov.companieshouse.missingimagedelivery.orders.api.service.MissingImageDeliveryItemService;
+import uk.gov.companieshouse.missingimagedelivery.orders.api.util.EricHeaderHelper;
+
 @Component
-public class UserAuthorisationInterceptor extends HandlerInterceptorAdapter {
+public class UserAuthorisationInterceptor implements HandlerInterceptor {
 
     private final MissingImageDeliveryItemService service;
 

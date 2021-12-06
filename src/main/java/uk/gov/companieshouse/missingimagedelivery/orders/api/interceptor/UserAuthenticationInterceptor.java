@@ -1,23 +1,22 @@
 package uk.gov.companieshouse.missingimagedelivery.orders.api.interceptor;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import uk.gov.companieshouse.logging.Logger;
-import uk.gov.companieshouse.missingimagedelivery.orders.api.util.EricHeaderHelper;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.REQUEST_ID_HEADER_NAME;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.REQUEST_ID_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.STATUS_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.getLogger;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.missingimagedelivery.orders.api.util.EricHeaderHelper;
+
 @Component
-public class UserAuthenticationInterceptor extends HandlerInterceptorAdapter {
+public class UserAuthenticationInterceptor implements HandlerInterceptor {
 
     private static final Logger LOGGER = getLogger();
 
