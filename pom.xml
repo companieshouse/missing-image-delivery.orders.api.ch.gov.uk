@@ -35,7 +35,8 @@
         <spring-cloud-contract-wiremock-version>2.2.2.RELEASE</spring-cloud-contract-wiremock-version>
         <start-class>uk.gov.companieshouse.missingimagedelivery.orders.api.MissingImageDeliveryApiApplication
         </start-class>
-        <structured-logging.version>1.9.0</structured-logging.version>
+        <structured-logging.version>1.9.10</structured-logging.version>
+        <log4j.version>2.15.0</log4j.version>
         <snakeyaml.version>1.29</snakeyaml.version>
         <system-rules-version>1.17.2</system-rules-version>
         <!-- Docker property -->
@@ -90,7 +91,6 @@
             <version>${api-security-java.version}</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -143,6 +143,22 @@
             <artifactId>structured-logging</artifactId>
             <version>${structured-logging.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <!-- Override log4j versions -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>

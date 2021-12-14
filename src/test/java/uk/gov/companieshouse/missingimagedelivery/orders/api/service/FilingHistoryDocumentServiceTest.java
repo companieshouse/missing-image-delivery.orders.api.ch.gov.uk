@@ -1,17 +1,20 @@
 package uk.gov.companieshouse.missingimagedelivery.orders.api.service;
 
-import com.google.api.client.http.HttpHeaders;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static uk.gov.companieshouse.api.error.ApiErrorResponseException.fromIOException;
+
 import com.google.api.client.http.HttpResponseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.companieshouse.api.InternalApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
@@ -23,20 +26,10 @@ import uk.gov.companieshouse.api.model.filinghistory.FilingApi;
 
 import java.io.IOException;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static uk.gov.companieshouse.api.error.ApiErrorResponseException.fromHttpResponseException;
-import static uk.gov.companieshouse.api.error.ApiErrorResponseException.fromIOException;
-
 /**
  * Unit tests the {@link FilingHistoryDocumentService} class.
  */
 @ExtendWith(MockitoExtension.class)
-@RunWith(PowerMockRunner.class)
 @PrepareForTest(HttpResponseException.class)
 public class FilingHistoryDocumentServiceTest {
 
@@ -104,28 +97,6 @@ public class FilingHistoryDocumentServiceTest {
                         () -> serviceUnderTest.getFilingHistoryDocument(COMPANY_NUMBER, FILING_SOUGHT));
         assertThat(exception.getStatus(), is(INTERNAL_SERVER_ERROR));
         assertThat(exception.getReason(), is(IOEXCEPTION_EXPECTED_REASON));
-    }
-
-    /**
-     * This is a JUnit 4 test to take advantage of PowerMock.
-     * @throws Exception should something unexpected happen
-     */
-    @org.junit.Test
-    public void nonServerInternalErrorResponseReportedAsBadRequest() throws Exception {
-
-        // Given
-        final HttpResponseException httpResponseException = PowerMockito.mock(HttpResponseException.class);
-        when(httpResponseException.getStatusCode()).thenReturn(404);
-        when(httpResponseException.getStatusMessage()).thenReturn("Not Found");
-        when(httpResponseException.getHeaders()).thenReturn(new HttpHeaders());
-        final ApiErrorResponseException ex = fromHttpResponseException(httpResponseException);
-        setUpForFilingApiException(ex);
-
-        // When and then
-        final ResponseStatusException exception = assertThrows(ResponseStatusException.class,
-                        () -> serviceUnderTest.getFilingHistoryDocument(COMPANY_NUMBER, FILING_SOUGHT));
-        assertThat(exception.getStatus(), is(BAD_REQUEST));
-        assertThat(exception.getReason(), is(NOT_FOUND_EXPECTED_REASON));
     }
 
     /**
