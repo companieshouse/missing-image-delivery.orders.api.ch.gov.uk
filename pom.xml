@@ -35,8 +35,8 @@
         <spring-cloud-contract-wiremock-version>2.2.2.RELEASE</spring-cloud-contract-wiremock-version>
         <start-class>uk.gov.companieshouse.missingimagedelivery.orders.api.MissingImageDeliveryApiApplication
         </start-class>
-        <structured-logging.version>1.9.10</structured-logging.version>
-        <log4j.version>2.15.0</log4j.version>
+        <structured-logging.version>1.9.11</structured-logging.version>
+        <log4j.version>2.17.0</log4j.version>
         <snakeyaml.version>1.29</snakeyaml.version>
         <system-rules-version>1.17.2</system-rules-version>
         <!-- Docker property -->
