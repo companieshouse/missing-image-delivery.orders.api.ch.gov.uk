@@ -36,7 +36,7 @@
         <start-class>uk.gov.companieshouse.missingimagedelivery.orders.api.MissingImageDeliveryApiApplication
         </start-class>
         <structured-logging.version>1.9.12</structured-logging.version>
-        <snakeyaml.version>1.29</snakeyaml.version>
+        <snakeyaml.version>1.32</snakeyaml.version>
         <system-rules-version>1.17.2</system-rules-version>
         <!-- Docker property -->
         <jib-maven-plugin.version>3.1.1</jib-maven-plugin.version>
