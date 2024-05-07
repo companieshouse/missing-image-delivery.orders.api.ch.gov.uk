@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.missingimagedelivery.orders.api.controller;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 import java.util.List;
 
@@ -9,21 +9,22 @@ import java.util.List;
  */
 public class ApiError {
 
-    private final HttpStatus status;
+    private final HttpStatusCode statusCode;
     private final List<String> errors;
 
-    public ApiError(final HttpStatus status, final List<String> errors) {
+    public ApiError(final HttpStatusCode statusCode, final List<String> errors) {
         super();
-        this.status = status;
+        this.statusCode = statusCode;
         this.errors = errors;
     }
 
-    public HttpStatus getStatus() {
-        return status;
+    public HttpStatusCode getStatusCode() {
+        return statusCode;
     }
 
     public List<String> getErrors() {
         return errors;
     }
+
 
 }

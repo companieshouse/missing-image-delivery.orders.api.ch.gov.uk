@@ -8,8 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class HealthcheckControllerTest {
@@ -24,6 +23,6 @@ public class HealthcheckControllerTest {
         final ResponseEntity<Void> response = controllerUnderTest.getHealthCheck();
 
         // Then the response is HTTP 200
-        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        assertEquals( HttpStatus.OK, response.getStatusCode());
     }
 }
