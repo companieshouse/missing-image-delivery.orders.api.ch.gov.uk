@@ -7,7 +7,7 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWireMock(port = 0)
-class MissingImageDeliverypiApplicationTests {
+class MissingImageDeliveryApiApplicationTests {
 
     @SuppressWarnings("squid:S2699") // at least one assertion
     @Test
