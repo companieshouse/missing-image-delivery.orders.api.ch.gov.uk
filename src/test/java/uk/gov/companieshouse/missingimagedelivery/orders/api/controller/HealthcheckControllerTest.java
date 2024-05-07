@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.missingimagedelivery.orders.api.controller;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +24,6 @@ public class HealthcheckControllerTest {
         final ResponseEntity<Void> response = controllerUnderTest.getHealthCheck();
 
         // Then the response is HTTP 200
-        assertEquals( HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
