@@ -37,7 +37,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             @NonNull final HttpStatusCode status,
             @NonNull final WebRequest request) {
         final ApiError apiError = buildBadRequestApiError(ex);
-        return super.handleExceptionInternal(ex,apiError, headers, apiError.getStatusCode(), request);
+        return handleExceptionInternal(ex, apiError ,headers, apiError.getStatusCode(), request);
     }
 
     @Override
