@@ -1,9 +1,9 @@
 # Define all hardcoded local variable and local variables looked up from data resources
 locals {
-  stack_name                 = "orders-service" # this must match the stack name the service deploys into
+  stack_name                 = "order-service" # this must match the stack name the service deploys into
   name_prefix                = "${local.stack_name}-${var.environment}"
   global_prefix              = "global-${var.environment}"
-  service_name               = "missing-image-delivery.orders.api.ch.gov.uk"
+  service_name               = "missing-image-delivery-orders-api"
   container_port             = 8080
   eric_port                  = "10000"
   docker_repo                = "missing-image-delivery.orders.api.ch.gov.uk"
