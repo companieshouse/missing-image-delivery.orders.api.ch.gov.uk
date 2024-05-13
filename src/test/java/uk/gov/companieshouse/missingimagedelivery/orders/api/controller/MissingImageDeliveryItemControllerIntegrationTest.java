@@ -342,7 +342,7 @@ class MissingImageDeliveryItemControllerIntegrationTest {
     private MissingImageDeliveryItem newMissingImageDeliveryItem() {
         final MissingImageDeliveryItemData itemData = new MissingImageDeliveryItemData();
         itemData.setCompanyName(COMPANY_NAME);
-       itemData.setCompanyNumber(COMPANY_NUMBER);
+        itemData.setCompanyNumber(COMPANY_NUMBER);
         itemData.setId(MISSING_IMAGE_DELIVERY_ID);
         itemData.setQuantity(QUANTITY_1);
         itemData.setCustomerReference(CUSTOMER_REFERENCE);

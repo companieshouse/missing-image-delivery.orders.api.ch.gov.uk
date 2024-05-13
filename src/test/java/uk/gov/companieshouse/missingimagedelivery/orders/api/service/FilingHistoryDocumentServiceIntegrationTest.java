@@ -48,16 +48,9 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
  * Integration tests the {@link FilingHistoryDocumentService}.
  */
 @SpringBootTest
-//@SpringJUnitConfig(FilingHistoryDocumentServiceIntegrationTest.Config.class)
 @ExtendWith(SystemStubsExtension.class)
 @AutoConfigureWireMock(port = 0)
 class FilingHistoryDocumentServiceIntegrationTest {
-
-//    @ClassRule
-//    public static final EnvironmentVariables environmentVariables = new EnvironmentVariables();
-
-    
-    
 
     private static final String COMPANY_NUMBER = "00006400";
     private static final String UNKNOWN_COMPANY_NUMBER = "00000000";
