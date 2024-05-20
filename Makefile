@@ -74,5 +74,5 @@ sonar-pr-analysis:
 	mvn sonar:sonar	-P sonar-pr-analysis
 
 .PHONY: security-check
-security-check:
-	mvn org.owasp:dependency-check-maven:check -DassemblyAnalyzerEnabled=false -DfailBuildOnCVSS=11 -DsuppressionFiles=suppress.xml
+security-check: security-report
+	mvn org.owasp:dependency-check-maven:check -DassemblyAnalyzerEnabled=false -DfailBuildOnCVSS=$(FAIL_BUILD_CVSS_LIMIT)
