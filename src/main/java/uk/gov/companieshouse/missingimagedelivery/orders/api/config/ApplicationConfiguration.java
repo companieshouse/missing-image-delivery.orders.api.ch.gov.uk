@@ -2,10 +2,10 @@ package uk.gov.companieshouse.missingimagedelivery.orders.api.config;
 
 import static com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -25,14 +25,21 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
     @Value("${uk.gov.companieshouse.missingimagedelivery.orders.api.home}")
     String missingImageDeliveryHome;
 
-    @Autowired
-    private UserAuthenticationInterceptor userAuthenticationInterceptor;
+    private final UserAuthenticationInterceptor userAuthenticationInterceptor;
 
-    @Autowired
-    private UserAuthorisationInterceptor userAuthorisationInterceptor;
+    private final UserAuthorisationInterceptor userAuthorisationInterceptor;
 
-    @Autowired
-    private CRUDAuthenticationInterceptor crudPermissionsInterceptor;
+    private final CRUDAuthenticationInterceptor crudPermissionsInterceptor;
+
+    public ApplicationConfiguration(
+            UserAuthenticationInterceptor userAuthenticationInterceptor,
+            UserAuthorisationInterceptor userAuthorisationInterceptor,
+            @Lazy CRUDAuthenticationInterceptor crudPermissionsInterceptor) {
+        this.userAuthorisationInterceptor = userAuthorisationInterceptor;
+        this.userAuthenticationInterceptor = userAuthenticationInterceptor;
+        this.crudPermissionsInterceptor = crudPermissionsInterceptor;
+    }
+
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {

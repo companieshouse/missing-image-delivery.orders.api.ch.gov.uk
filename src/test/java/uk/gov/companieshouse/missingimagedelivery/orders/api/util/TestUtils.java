@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.missingimagedelivery.orders.api.util;
 
-import org.junit.contrib.java.lang.system.EnvironmentVariables;
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import org.springframework.core.env.Environment;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.MissingImageDeliveryItem;
 import java.time.LocalDateTime;

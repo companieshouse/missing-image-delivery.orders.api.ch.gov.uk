@@ -2,6 +2,7 @@ package uk.gov.companieshouse.missingimagedelivery.orders.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import uk.gov.companieshouse.missingimagedelivery.orders.api.config.AbstractMongoConfig;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemOptionsRequestDto;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemRequestDTO;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemResponseDTO;
@@ -40,8 +43,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.verifyZeroInteractions;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -64,9 +67,10 @@ import static uk.gov.companieshouse.missingimagedelivery.orders.api.util.TestCon
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.util.TestUtils.verifyCreationTimestampsWithinExecutionInterval;
 
 
+@Testcontainers
 @AutoConfigureMockMvc
 @SpringBootTest
-class MissingImageDeliveryItemControllerIntegrationTest {
+class MissingImageDeliveryItemControllerIntegrationTest extends AbstractMongoConfig {
 
     private static final String TOKEN_PERMISSION_VALUE = "user_orders=%s";
     private static final String MISSING_IMAGE_DELIVERY_ID = "MID-462515-995726";
@@ -123,6 +127,11 @@ class MissingImageDeliveryItemControllerIntegrationTest {
     private MissingImageDeliveryCostCalculatorService calculatorService;
     @MockBean
     private FilingHistoryDocumentService filingHistoryDocumentService;
+
+    @BeforeAll
+    static void setup() {
+        mongoDBContainer.start();
+    }
 
     @AfterEach
     void tearDown() {
@@ -392,4 +401,5 @@ class MissingImageDeliveryItemControllerIntegrationTest {
                 = repository.findById(missingImageDeliveryId);
         assertThat(retrievedMissingImageDeliveryItem.isPresent(), is(false));
     }
+
 }

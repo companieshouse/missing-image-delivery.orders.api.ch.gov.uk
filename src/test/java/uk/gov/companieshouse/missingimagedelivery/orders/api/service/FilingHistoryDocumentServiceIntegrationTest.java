@@ -23,11 +23,12 @@ import com.github.tomakehurst.wiremock.http.Fault;
 import java.time.LocalDate;
 import java.util.Collections;
 import org.hamcrest.core.Is;
-import org.junit.ClassRule;
-import org.junit.contrib.java.lang.system.EnvironmentVariables;
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,22 +37,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.companieshouse.api.model.filinghistory.FilingApi;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.MissingImageDeliveryItemOptions;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 
 /**
  * Integration tests the {@link FilingHistoryDocumentService}.
  */
 @SpringBootTest
-@SpringJUnitConfig(FilingHistoryDocumentServiceIntegrationTest.Config.class)
+@ExtendWith(SystemStubsExtension.class)
 @AutoConfigureWireMock(port = 0)
 class FilingHistoryDocumentServiceIntegrationTest {
-
-    @ClassRule
-    public static final EnvironmentVariables ENVIRONMENT_VARIABLES = new EnvironmentVariables();
 
     private static final String COMPANY_NUMBER = "00006400";
     private static final String UNKNOWN_COMPANY_NUMBER = "00000000";
@@ -110,12 +109,26 @@ class FilingHistoryDocumentServiceIntegrationTest {
     @MockBean
     private MissingImageDeliveryCostCalculatorService missingImageDeliveryCostCalculatorService;
 
+    @SystemStub
+    private EnvironmentVariables environmentVariables;
+
+    @BeforeEach
+    public void beforeEach(){
+        final String wireMockPort = environment.getProperty("wiremock.server.port");
+        environmentVariables.set("CHS_API_KEY", "MGQ1MGNlYmFkYzkxZTM2MzlkNGVmMzg4ZjgxMmEz");
+        environmentVariables.set("API_URL", "http://localhost:" + wireMockPort);
+        environmentVariables.set("PAYMENTS_API_URL", "http://localhost:" + wireMockPort);
+        environmentVariables.set("DOCUMENT_API_LOCAL_URL", "http://localhost:" + wireMockPort);
+    }
+    
+    
+
     @Test
     @DisplayName("getFilingHistoryDocument gets the expected filing history document successfully")
     void getFilingHistoryDocumentsSuccessfully() throws JsonProcessingException {
 
         // Given
-        givenSdkIsConfigured(environment, ENVIRONMENT_VARIABLES);
+        givenSdkIsConfigured(environment, environmentVariables);
         givenThat(get(urlEqualTo("/company/" + COMPANY_NUMBER + "/filing-history/" + ID_1))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
@@ -138,7 +151,7 @@ class FilingHistoryDocumentServiceIntegrationTest {
     void getFilingHistoryThrowsBadRequestForUnknownCompany() throws JsonProcessingException {
 
         // Given
-        givenSdkIsConfigured(environment, ENVIRONMENT_VARIABLES);
+        givenSdkIsConfigured(environment, environmentVariables);
         givenThat(get(urlEqualTo("/company/" + UNKNOWN_COMPANY_NUMBER + "/filing-history/" + ID_1))
                 .willReturn(badRequest()
                         .withHeader("Content-Type", "application/json")
@@ -148,7 +161,7 @@ class FilingHistoryDocumentServiceIntegrationTest {
         final ResponseStatusException exception =
                 Assertions.assertThrows(ResponseStatusException.class,
                         () -> serviceUnderTest.getFilingHistoryDocument(UNKNOWN_COMPANY_NUMBER, ID_1));
-        assertThat(exception.getStatus(), Is.is(BAD_REQUEST));
+        assertThat(exception.getStatusCode(), Is.is(BAD_REQUEST));
         final String expectedReason = "Error getting filing history document " + ID_1 +
                 " for company number " + UNKNOWN_COMPANY_NUMBER + ".";
         assertThat(exception.getReason(), Is.is(expectedReason));
@@ -159,7 +172,7 @@ class FilingHistoryDocumentServiceIntegrationTest {
     void getFilingHistoryThrowsBadRequestForUnknownFilingHistoryDocument() throws JsonProcessingException {
 
         // Given
-        givenSdkIsConfigured(environment, ENVIRONMENT_VARIABLES);
+        givenSdkIsConfigured(environment, environmentVariables);
         givenThat(get(urlEqualTo("/company/" + COMPANY_NUMBER + "/filing-history/" + UNKNOWN_ID))
                 .willReturn(badRequest()
                         .withHeader("Content-Type", "application/json")
@@ -168,7 +181,7 @@ class FilingHistoryDocumentServiceIntegrationTest {
         final ResponseStatusException exception =
                 Assertions.assertThrows(ResponseStatusException.class,
                         () -> serviceUnderTest.getFilingHistoryDocument(COMPANY_NUMBER, UNKNOWN_ID));
-        assertThat(exception.getStatus(), Is.is(BAD_REQUEST));
+        assertThat(exception.getStatusCode(), Is.is(BAD_REQUEST));
         final String expectedReason = "Error getting filing history document " + UNKNOWN_ID +
                 " for company number " + COMPANY_NUMBER + ".";
         assertThat(exception.getReason(), Is.is(expectedReason));
@@ -179,7 +192,7 @@ class FilingHistoryDocumentServiceIntegrationTest {
     void getFilingHistoryThrowsInternalServerErrorForForConnectionFailure() {
 
         // Given
-        final String wireMockPort = givenSdkIsConfigured(environment, ENVIRONMENT_VARIABLES);
+        final String wireMockPort = givenSdkIsConfigured(environment, environmentVariables);
         givenThat(get(urlEqualTo("/company/" + COMPANY_NUMBER + "/filing-history/" + ID_1))
                 .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)));
 
@@ -187,7 +200,7 @@ class FilingHistoryDocumentServiceIntegrationTest {
         final ResponseStatusException exception =
                 Assertions.assertThrows(ResponseStatusException.class,
                         () -> serviceUnderTest.getFilingHistoryDocument(COMPANY_NUMBER, ID_1));
-        assertThat(exception.getStatus(), Is.is(INTERNAL_SERVER_ERROR));
+        assertThat(exception.getStatusCode(), Is.is(INTERNAL_SERVER_ERROR));
         final String expectedReason = "Error sending request to http://localhost:"
                 + wireMockPort + "/company/" + COMPANY_NUMBER + "/filing-history/" + ID_1 + ": Connection reset";
         assertThat(exception.getReason(), Is.is(expectedReason));
