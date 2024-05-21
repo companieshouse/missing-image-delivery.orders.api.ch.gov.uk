@@ -9,7 +9,7 @@ locals {
   docker_repo                = "missing-image-delivery.orders.api.ch.gov.uk"
   kms_alias                  = "alias/${var.aws_profile}/environment-services-kms"
   lb_listener_rule_priority  = 56
-  lb_listener_paths          = ["/orderable/missing-image-deliveries","/orderable/missing-image-deliveries/healthcheck"]
+  lb_listener_paths          = ["/orderable/missing-image-deliveries*","/orderable/missing-image-deliveries/healthcheck"]
   healthcheck_path           = "/orderable/missing-image-deliveries/healthcheck" ##healthcheck path for missing image delivery service
   healthcheck_matcher        = "200"
   s3_config_bucket           = data.vault_generic_secret.shared_s3.data["config_bucket_name"]
