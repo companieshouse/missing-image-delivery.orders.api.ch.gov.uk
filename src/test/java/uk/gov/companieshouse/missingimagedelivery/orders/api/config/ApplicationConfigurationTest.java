@@ -43,7 +43,7 @@ class ApplicationConfigurationTest {
     @Test
     void addInterceptors() {
         final String expectedAuthPathPattern = CERTIFIED_COPIES_HOME + "/**";
-        final String expectedExcludedPathPattern = CERTIFIED_COPIES_HOME + "/healthcheck";
+
 
         InterceptorRegistry registry = Mockito.mock(InterceptorRegistry.class);
 
@@ -61,10 +61,8 @@ class ApplicationConfigurationTest {
         config.addInterceptors(registry);
 
         verify(userAuthenticationInterceptorRegistration).addPathPatterns(expectedAuthPathPattern);
-        verify(userAuthenticationInterceptorRegistration).excludePathPatterns(expectedExcludedPathPattern);
         verify(userAuthorisationInterceptorRegistration).addPathPatterns(expectedAuthPathPattern);
         verify(crudPermissionInterceptorRegistration).addPathPatterns(expectedAuthPathPattern);
-        verify(crudPermissionInterceptorRegistration).excludePathPatterns(expectedExcludedPathPattern);
 
         InOrder inOrder = Mockito.inOrder(registry);
         inOrder.verify(registry).addInterceptor(userAuthenticationInterceptor);

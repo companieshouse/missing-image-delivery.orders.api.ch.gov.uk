@@ -44,12 +44,9 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
         final String authPathPattern = missingImageDeliveryHome + "/**";
-        final String healthCheckPathPattern = missingImageDeliveryHome + "/healthcheck";
-        registry.addInterceptor(userAuthenticationInterceptor).addPathPatterns(authPathPattern)
-                .excludePathPatterns(healthCheckPathPattern);
+        registry.addInterceptor(userAuthenticationInterceptor).addPathPatterns(authPathPattern);
         registry.addInterceptor(userAuthorisationInterceptor).addPathPatterns(authPathPattern);
-        registry.addInterceptor(crudPermissionsInterceptor).addPathPatterns(authPathPattern)
-                .excludePathPatterns(healthCheckPathPattern);
+        registry.addInterceptor(crudPermissionsInterceptor).addPathPatterns(authPathPattern);
     }
 
     @Bean
