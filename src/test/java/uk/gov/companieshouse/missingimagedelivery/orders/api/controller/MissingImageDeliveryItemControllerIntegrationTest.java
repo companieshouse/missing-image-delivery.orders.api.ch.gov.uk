@@ -91,6 +91,9 @@ class MissingImageDeliveryItemControllerIntegrationTest extends AbstractMongoCon
     private static final String KIND = "item#missing-image-delivery";
     private static final boolean POSTAL_DELIVERY = false;
 
+    private static final boolean USER_ELIGIBLE_FREE_CERTIFICATES = true;
+    private static final boolean USER_NOT_ELIGIBLE_FREE_CERTIFICATES = false;
+
     private static final ItemCostCalculation CALCULATION = new ItemCostCalculation(
             singletonList(new ItemCosts(DISCOUNT_APPLIED,
                     MISSING_IMAGE_DELIVERY_ITEM_COST_STRING,
@@ -162,7 +165,7 @@ class MissingImageDeliveryItemControllerIntegrationTest extends AbstractMongoCon
 
         when(idGeneratorService.autoGenerateId()).thenReturn(MISSING_IMAGE_DELIVERY_ID);
         when(etagGeneratorService.generateEtag()).thenReturn(TOKEN_ETAG);
-        when(calculatorService.calculateCosts(QUANTITY_1, ACCOUNTS_PRODUCT_TYPE)).thenReturn(CALCULATION);
+        when(calculatorService.calculateCosts(QUANTITY_1, ACCOUNTS_PRODUCT_TYPE, USER_NOT_ELIGIBLE_FREE_CERTIFICATES)).thenReturn(CALCULATION);
         when(companyService.getCompanyName(COMPANY_NUMBER)).thenReturn(COMPANY_NAME);
         when(filingHistoryDocumentService.getFilingHistoryDocument(eq(COMPANY_NUMBER), anyString())).thenReturn(filing);
 
@@ -348,6 +351,7 @@ class MissingImageDeliveryItemControllerIntegrationTest extends AbstractMongoCon
         verifyZeroInteractions(idGeneratorService);
 
     }
+
     private MissingImageDeliveryItem newMissingImageDeliveryItem() {
         final MissingImageDeliveryItemData itemData = new MissingImageDeliveryItemData();
         itemData.setCompanyName(COMPANY_NAME);
@@ -394,6 +398,7 @@ class MissingImageDeliveryItemControllerIntegrationTest extends AbstractMongoCon
     /**
      * Verifies that the missing image delivery item cannot in fact be retrieved
      * from the database.
+     *
      * @param missingImageDeliveryId the expected ID of the newly created item
      */
     private void assertItemWasNotSaved(final String missingImageDeliveryId) {

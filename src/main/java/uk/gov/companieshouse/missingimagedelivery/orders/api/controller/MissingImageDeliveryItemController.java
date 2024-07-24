@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemRequestDTO;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemResponseDTO;
+import uk.gov.companieshouse.missingimagedelivery.orders.api.interceptor.EricAuthoriser;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.mapper.MissingImageDeliveryItemMapper;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.MissingImageDeliveryItem;
@@ -34,22 +36,28 @@ import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.Logg
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.STATUS_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.USER_ID_LOG_KEY;
 
+
 @RestController
 public class MissingImageDeliveryItemController {
+
+    private static final Logger LOGGER = LoggingUtils.getLogger();
 
     private final MissingImageDeliveryItemMapper mapper;
     private final CompanyService companyService;
     private final MissingImageDeliveryItemService missingImageDeliveryItemService;
     private final FilingHistoryDocumentService filingHistoryDocumentService;
+    private EricAuthoriser ericAuthoriser;
 
     public MissingImageDeliveryItemController(final MissingImageDeliveryItemMapper mapper,
                                         final CompanyService companyService,
                                         final MissingImageDeliveryItemService missingImageDeliveryItemService,
-                                        final FilingHistoryDocumentService filingHistoryDocumentService) {
+                                        final FilingHistoryDocumentService filingHistoryDocumentService,
+                                              final EricAuthoriser ericAuthoriser) {
         this.mapper = mapper;
         this.companyService = companyService;
         this.missingImageDeliveryItemService = missingImageDeliveryItemService;
         this.filingHistoryDocumentService = filingHistoryDocumentService;
+        this.ericAuthoriser = ericAuthoriser;
     }
 
     @PostMapping("${uk.gov.companieshouse.missingimagedelivery.orders.api.home}")
@@ -60,7 +68,8 @@ public class MissingImageDeliveryItemController {
 
         Map<String, Object> logMap = LoggingUtils.createLoggingDataMap(requestId);
         LoggingUtils.getLogger().infoRequest(request, "create missing image delivery item request", logMap);
-
+        final boolean entitledToFreeCertificates = ericAuthoriser.hasPermission("/admin/free-certs",  request);
+        LOGGER.info(String.valueOf(entitledToFreeCertificates));
         MissingImageDeliveryItem item = mapper.missingImageDeliveryItemRequestDTOtoMissingImageDeliveryItem(missingImageDeliveryItemRequestDTO);
 
         item.setUserId(EricHeaderHelper.getIdentity(request));
@@ -74,7 +83,7 @@ public class MissingImageDeliveryItemController {
 
         item.getData().setItemOptions(filing);
 
-        MissingImageDeliveryItem createdItem = missingImageDeliveryItemService.createMissingImageDeliveryItem(item);
+        MissingImageDeliveryItem createdItem = missingImageDeliveryItemService.createMissingImageDeliveryItem(item, entitledToFreeCertificates);
 
         logMap.put(USER_ID_LOG_KEY, createdItem.getUserId());
         logMap.put(COMPANY_NUMBER_LOG_KEY, createdItem.getCompanyNumber());

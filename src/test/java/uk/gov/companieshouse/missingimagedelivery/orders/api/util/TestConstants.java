@@ -19,6 +19,7 @@ public class TestConstants {
     public static final String MISSING_IMAGE_DELIVERY_ITEM_COST_STRING = "3";
     public static final String POSTAGE_COST = "0";
     public static final String CALCULATED_COST = "3";
+    public static final String FULL_DISCOUNT_EXPECTED_COST = "0";
     public static final String TOTAL_ITEM_COST = "3";
 
 }

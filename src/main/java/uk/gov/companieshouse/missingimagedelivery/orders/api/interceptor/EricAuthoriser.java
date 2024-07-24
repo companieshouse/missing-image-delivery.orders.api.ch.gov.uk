@@ -1,0 +1,56 @@
+package uk.gov.companieshouse.missingimagedelivery.orders.api.interceptor;
+
+
+import org.springframework.stereotype.Component;
+import uk.gov.companieshouse.missingimagedelivery.orders.api.util.StringHelper;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
+import static org.hibernate.validator.internal.util.CollectionHelper.asSet;
+import static uk.gov.companieshouse.missingimagedelivery.orders.api.util.EricHeaderHelper.ERIC_AUTHORISED_ROLES;
+import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.APPLICATION_NAMESPACE;
+
+@Component
+public
+class EricAuthoriser {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(APPLICATION_NAMESPACE);
+
+    private final StringHelper stringHelper;
+
+    public EricAuthoriser(final StringHelper stringHelper) {
+        this.stringHelper = stringHelper;
+    }
+
+    public boolean hasPermission(final String permission, final HttpServletRequest request) {
+        final String authorisedRolesHeader = request.getHeader(ERIC_AUTHORISED_ROLES);
+
+        LOGGER.debug("Checking " + ERIC_AUTHORISED_ROLES + " header with value `"
+                +  authorisedRolesHeader +"` for permission `" + permission + "`.");
+
+        if (isNull(authorisedRolesHeader)) {
+            return false;
+        }
+
+        final Set<String> permissions = stringHelper.asSet("\\s+", authorisedRolesHeader);
+        return permissions.contains(permission);
+    }
+//    private static Set<String> asSet(final String values) {
+//        if (values == null || values.trim().isEmpty()) {
+//            return Collections.emptySet();
+//        }
+//        return Arrays.stream(values.split(" "))
+//                .filter(s -> !s.isEmpty())
+//                .collect(Collectors.toSet());
+//    }
+
+
+}
