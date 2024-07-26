@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemRequestDTO;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemResponseDTO;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.interceptor.EricAuthoriser;
@@ -40,8 +39,6 @@ import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.Logg
 @RestController
 public class MissingImageDeliveryItemController {
 
-    private static final Logger LOGGER = LoggingUtils.getLogger();
-
     private final MissingImageDeliveryItemMapper mapper;
     private final CompanyService companyService;
     private final MissingImageDeliveryItemService missingImageDeliveryItemService;
@@ -68,8 +65,7 @@ public class MissingImageDeliveryItemController {
 
         Map<String, Object> logMap = LoggingUtils.createLoggingDataMap(requestId);
         LoggingUtils.getLogger().infoRequest(request, "create missing image delivery item request", logMap);
-        final boolean entitledToFreeCertificates = ericAuthoriser.hasPermission("/admin/free-certs",  request);
-        LOGGER.info(String.valueOf(entitledToFreeCertificates));
+        final boolean entitledToFreeCertificates = ericAuthoriser.hasPermission("/admin/free-mids",  request);
         MissingImageDeliveryItem item = mapper.missingImageDeliveryItemRequestDTOtoMissingImageDeliveryItem(missingImageDeliveryItemRequestDTO);
 
         item.setUserId(EricHeaderHelper.getIdentity(request));

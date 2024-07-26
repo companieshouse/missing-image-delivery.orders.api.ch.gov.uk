@@ -1,8 +1,6 @@
 package uk.gov.companieshouse.missingimagedelivery.orders.api.service;
 
 import org.springframework.stereotype.Service;
-import uk.gov.companieshouse.logging.Logger;
-import uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.FilingHistoryCategory;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.ItemCostCalculation;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.MissingImageDeliveryItem;
@@ -27,8 +25,6 @@ public class MissingImageDeliveryItemService {
     private final LinksGeneratorService linksGenerator;
     private final MissingImageDeliveryCostCalculatorService calculator;
     private final DescriptionProviderService descriptionProviderService;
-
-    private static final Logger LOGGER = LoggingUtils.getLogger();
     private static final String DESCRIPTION_IDENTIFIER = "missing-image-delivery";
     private static final String COMPANY_NUMBER_KEY = "company_number";
 
@@ -66,9 +62,7 @@ public class MissingImageDeliveryItemService {
         MissingImageDeliveryItemOptions itemOptions = item.getItemOptions();
         String category = itemOptions.getFilingHistoryCategory();
         ProductType productType = FilingHistoryCategory.enumValueOf(category).getProductType();
-        LOGGER.info("User value before cost" + String.valueOf(userGetsFreeCertificates));
         final ItemCostCalculation costs = calculator.calculateCosts(item.getQuantity(), productType, userGetsFreeCertificates );
-        LOGGER.info("Item costs: " + costs);
         item.setItemCosts(costs.getItemCosts());
         item.setPostageCost(costs.getPostageCost());
         item.setTotalItemCost(costs.getTotalItemCost());

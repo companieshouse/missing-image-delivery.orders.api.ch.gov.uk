@@ -15,11 +15,12 @@ public class TestConstants {
     public static final String FILING_HISTORY_TYPE_CH01 = "CH01";
     public static final String REQUEST_ID_HEADER_NAME = "X-Request-ID";
     public static final String DISCOUNT_APPLIED = "0";
+    public static final String DISCOUNT_APPLIED_WHEN_ELIGIBLE = "3";
     public static final int    MISSING_IMAGE_DELIVERY_ITEM_COST = 3;
     public static final String MISSING_IMAGE_DELIVERY_ITEM_COST_STRING = "3";
     public static final String POSTAGE_COST = "0";
     public static final String CALCULATED_COST = "3";
-    public static final String FULL_DISCOUNT_EXPECTED_COST = "0";
+    public static final String CALCULATED_COST_AFTER_DISCOUNT = "0";
     public static final String TOTAL_ITEM_COST = "3";
 
 }

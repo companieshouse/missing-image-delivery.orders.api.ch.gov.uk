@@ -32,7 +32,7 @@ public class MissingImageDeliveryCostCalculatorService {
      *
      * @param quantity                 the number of items
      * @param productType              product type based on category
-     * @param userGetsFreeCertificates
+     * @param userGetsFreeCertificates if user has permission admin/free-mids, return true
      * @return all of the relevant costs
      */
     public ItemCostCalculation calculateCosts(final int quantity, final ProductType productType, final boolean userGetsFreeCertificates) {
