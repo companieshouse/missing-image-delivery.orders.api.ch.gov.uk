@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemRequestDTO;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemResponseDTO;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.interceptor.EricAuthoriser;
@@ -29,11 +31,7 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
-import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.COMPANY_NUMBER_LOG_KEY;
-import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.REQUEST_ID_HEADER_NAME;
-import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.MISSING_IMAGE_DELIVERY_ID_LOG_KEY;
-import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.STATUS_LOG_KEY;
-import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.USER_ID_LOG_KEY;
+import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.*;
 
 
 @RestController
@@ -43,7 +41,7 @@ public class MissingImageDeliveryItemController {
     private final CompanyService companyService;
     private final MissingImageDeliveryItemService missingImageDeliveryItemService;
     private final FilingHistoryDocumentService filingHistoryDocumentService;
-    private EricAuthoriser ericAuthoriser;
+    private final EricAuthoriser ericAuthoriser;
 
     public MissingImageDeliveryItemController(final MissingImageDeliveryItemMapper mapper,
                                         final CompanyService companyService,

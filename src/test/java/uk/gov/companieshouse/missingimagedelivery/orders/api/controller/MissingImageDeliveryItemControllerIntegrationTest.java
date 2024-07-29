@@ -91,7 +91,6 @@ class MissingImageDeliveryItemControllerIntegrationTest extends AbstractMongoCon
     private static final String KIND = "item#missing-image-delivery";
     private static final boolean POSTAL_DELIVERY = false;
 
-    private static final boolean USER_ELIGIBLE_FREE_CERTIFICATES = true;
     private static final boolean USER_NOT_ELIGIBLE_FREE_CERTIFICATES = false;
 
     private static final ItemCostCalculation CALCULATION = new ItemCostCalculation(

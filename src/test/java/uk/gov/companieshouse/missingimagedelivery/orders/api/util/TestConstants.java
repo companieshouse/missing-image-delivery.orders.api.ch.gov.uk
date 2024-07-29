@@ -10,6 +10,7 @@ public class TestConstants {
     public static final String ERIC_IDENTITY_TYPE_HEADER_NAME = "ERIC-Identity-Type";
     public static final String ERIC_IDENTITY_TYPE_API_KEY_VALUE = "key";
     public static final String MISSING_IMAGE_DELIVERY_URL = "/orderable/missing-image-deliveries";
+    public static final String ERIC_AUTHORISED_ROLES = "ERIC-Authorised-Roles";
     public static final ApiErrorResponsePayload FILING_NOT_FOUND =
         new ApiErrorResponsePayload(singletonList(new Error("ch:service", "filing-history-item-not-found")));
     public static final String FILING_HISTORY_TYPE_CH01 = "CH01";
