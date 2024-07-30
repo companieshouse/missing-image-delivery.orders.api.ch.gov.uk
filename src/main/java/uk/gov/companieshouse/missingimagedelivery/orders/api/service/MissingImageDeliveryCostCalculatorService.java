@@ -1,9 +1,7 @@
 package uk.gov.companieshouse.missingimagedelivery.orders.api.service;
 
 import org.springframework.stereotype.Service;
-import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.config.CostsConfig;
-import uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.ItemCostCalculation;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.ItemCosts;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.ProductType;
@@ -19,8 +17,6 @@ public class MissingImageDeliveryCostCalculatorService {
     private static final String ZERO_POSTAGE_COST = "0";      // Postage is not applicable to MID.
 
     private final CostsConfig costs;
-    private static final Logger LOGGER = LoggingUtils.getLogger();
-
     /**
      * Constructor.
      * @param costs the configured costs used by this in its calculations
@@ -39,22 +35,15 @@ public class MissingImageDeliveryCostCalculatorService {
         checkArguments(quantity);
         final int basicCost = costs.getMissingImageDeliveryItemCost();
         final int calculatedCost;
-
-        LOGGER.info("userGetsFreeCertificates at calculateCosts : " + userGetsFreeCertificates );
         if (userGetsFreeCertificates) {
             calculatedCost = 0;
         } else {
             calculatedCost = basicCost;
         }
-        //If the user has permission, discount is calculated which is based on the total basic cost so no pay is needed
+        // If the user has permission, discount is calculated which is based on the total basic cost so no pay is needed
         final String discountApplied = userGetsFreeCertificates ? Integer.toString(basicCost) : "0";
         final String itemCost = Integer.toString(basicCost);
         final String totalItemCost = Integer.toString(quantity * calculatedCost);
-
-        LOGGER.info("discount : " + discountApplied );
-        LOGGER.info("itemCost : " + itemCost );
-
-        LOGGER.info("totalItemCost : " + totalItemCost );
         return new ItemCostCalculation(
                 singletonList(new ItemCosts(discountApplied,
                         itemCost,

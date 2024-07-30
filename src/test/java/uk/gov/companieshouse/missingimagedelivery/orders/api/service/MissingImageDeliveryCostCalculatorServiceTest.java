@@ -178,7 +178,3 @@ class MissingImageDeliveryCostCalculatorServiceTest {
         assertThat(result).isEqualToComparingFieldByFieldRecursively(DISCOUNT_ADJUSTED_ITEM_COST_EXPECTED_CALCULATION);
     }
 }
-
-
-
-

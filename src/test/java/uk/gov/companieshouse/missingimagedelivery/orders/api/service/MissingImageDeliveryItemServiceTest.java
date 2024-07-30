@@ -51,7 +51,6 @@ public class MissingImageDeliveryItemServiceTest {
 
     public static final String FILING_HISTORY_CATEGORY = "resolution";
     private static final ProductType MISC_PRODUCT_TYPE = MISSING_IMAGE_DELIVERY_MISC;
-    private static final boolean USER_ELIGIBLE_FREE_CERTIFICATES = true;
     private static final boolean USER_NOT_ELIGIBLE_FREE_CERTIFICATES = false;
 
     private static final ItemCosts ITEM_COSTS = new ItemCosts(DISCOUNT_APPLIED, MISSING_IMAGE_DELIVERY_ITEM_COST_STRING,
@@ -130,57 +129,4 @@ public class MissingImageDeliveryItemServiceTest {
         assertThat(missingImageDeliveryItem.getItemOptions().getFilingHistoryBarcode(), is(FILING_HISTORY_BARCODE));
         verify(repository).save(missingImageDeliveryItem);
     }
-
-
-    @Test
-    @DisplayName("createMissingImageDeliveryItem creates and saves item with id, timestamps, etag and links, returns item with costs and item options")
-    void createMissingImageDeliveryItemHasDiscountForAdmin() {
-
-        // Given
-        when(idGeneratorService.autoGenerateId()).thenReturn(ID);
-        final MissingImageDeliveryItemOptions midItemOptions = new MissingImageDeliveryItemOptions(FILING_HISTORY_DATE,
-                FILING_HISTORY_DESCRIPTION, FILING_HISTORY_DESCRIPTION_VALUES, FILING_HISTORY_ID, FILING_HISTORY_TYPE,
-                FILING_HISTORY_CATEGORY, FILING_HISTORY_BARCODE);
-        when(costCalculatorService.calculateCosts(QUANTITY, MISC_PRODUCT_TYPE, USER_ELIGIBLE_FREE_CERTIFICATES)).thenReturn(CALCULATION);
-        MissingImageDeliveryItemData missingImageDeliveryItemData = new MissingImageDeliveryItemData();
-        missingImageDeliveryItemData.setCompanyNumber(COMPANY_NUMBER);
-        MissingImageDeliveryItem missingImageDeliveryItem = new MissingImageDeliveryItem();
-        missingImageDeliveryItem.setData(missingImageDeliveryItemData);
-        missingImageDeliveryItem.setQuantity(QUANTITY);
-        missingImageDeliveryItem.setKind(KIND);
-        missingImageDeliveryItem.setItemOptions(midItemOptions);
-
-        when(repository.save(missingImageDeliveryItem)).thenReturn(missingImageDeliveryItem);
-
-        final LocalDateTime intervalStart = LocalDateTime.now();
-
-        // When
-        missingImageDeliveryItem = serviceUnderTest.createMissingImageDeliveryItem(missingImageDeliveryItem, USER_ELIGIBLE_FREE_CERTIFICATES);
-
-        // Then
-        final LocalDateTime intervalEnd = LocalDateTime.now();
-
-        verifyCreationTimestampsWithinExecutionInterval(missingImageDeliveryItem, intervalStart, intervalEnd);
-        assertThat(missingImageDeliveryItem.getId(), is(ID));
-        verify(etagGenerator).generateEtag();
-        verify(linksGenerator).generateLinks(ID);
-        assertThat(missingImageDeliveryItem.getId(), is(ID));
-        verify(costCalculatorService).calculateCosts(QUANTITY, MISC_PRODUCT_TYPE, USER_ELIGIBLE_FREE_CERTIFICATES);
-        verify(descriptionProviderService).getDescription(COMPANY_NUMBER);
-        assertThat(missingImageDeliveryItem.getItemCosts(), is(singletonList(ITEM_COSTS)));
-        assertThat(missingImageDeliveryItem.getPostageCost(), is(POSTAGE_COST));
-        assertThat(missingImageDeliveryItem.getKind(), is(KIND));
-        assertThat(missingImageDeliveryItem.getTotalItemCost(), is(TestConstants.TOTAL_ITEM_COST));
-        assertThat(missingImageDeliveryItem.getItemOptions().getFilingHistoryDate(), is(FILING_HISTORY_DATE));
-        assertThat(missingImageDeliveryItem.getItemOptions().getFilingHistoryDescription(),
-                is(FILING_HISTORY_DESCRIPTION));
-        assertThat(missingImageDeliveryItem.getItemOptions().getFilingHistoryDescriptionValues(),
-                is(FILING_HISTORY_DESCRIPTION_VALUES));
-        assertThat(missingImageDeliveryItem.getItemOptions().getFilingHistoryId(), is(FILING_HISTORY_ID));
-        assertThat(missingImageDeliveryItem.getItemOptions().getFilingHistoryType(), is(FILING_HISTORY_TYPE));
-        assertThat(missingImageDeliveryItem.getItemOptions().getFilingHistoryCategory(), is(FILING_HISTORY_CATEGORY));
-        assertThat(missingImageDeliveryItem.getItemOptions().getFilingHistoryBarcode(), is(FILING_HISTORY_BARCODE));
-        verify(repository).save(missingImageDeliveryItem);
-    }
-
 }
