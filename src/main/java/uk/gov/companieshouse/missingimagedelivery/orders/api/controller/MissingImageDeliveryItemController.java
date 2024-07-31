@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.companieshouse.logging.Logger;
-import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemRequestDTO;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemResponseDTO;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.interceptor.EricAuthoriser;
@@ -77,7 +75,7 @@ public class MissingImageDeliveryItemController {
 
         item.getData().setItemOptions(filing);
 
-        MissingImageDeliveryItem createdItem = missingImageDeliveryItemService.createMissingImageDeliveryItem(item, entitledToFreeCertificates);
+        var createdItem = missingImageDeliveryItemService.createMissingImageDeliveryItem(item, entitledToFreeCertificates);
 
         logMap.put(USER_ID_LOG_KEY, createdItem.getUserId());
         logMap.put(COMPANY_NUMBER_LOG_KEY, createdItem.getCompanyNumber());

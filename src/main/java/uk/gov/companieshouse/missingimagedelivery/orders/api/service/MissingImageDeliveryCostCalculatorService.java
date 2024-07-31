@@ -42,8 +42,8 @@ public class MissingImageDeliveryCostCalculatorService {
         }
         // If the user has permission, discount is calculated which is based on the total basic cost so no pay is needed
         final String discountApplied = userGetsFreeCertificates ? Integer.toString(basicCost) : "0";
-        final String itemCost = Integer.toString(basicCost);
-        final String totalItemCost = Integer.toString(quantity * calculatedCost);
+        final var itemCost = Integer.toString(basicCost);
+        final var totalItemCost = Integer.toString(quantity * calculatedCost);
         return new ItemCostCalculation(
                 singletonList(new ItemCosts(discountApplied,
                         itemCost,
