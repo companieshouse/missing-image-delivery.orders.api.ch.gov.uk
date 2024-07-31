@@ -34,12 +34,7 @@ public class MissingImageDeliveryCostCalculatorService {
     public ItemCostCalculation calculateCosts(final int quantity, final ProductType productType, final boolean userGetsFreeCertificates) {
         checkArguments(quantity);
         final int basicCost = costs.getMissingImageDeliveryItemCost();
-        final int calculatedCost;
-        if (userGetsFreeCertificates) {
-            calculatedCost = 0;
-        } else {
-            calculatedCost = basicCost;
-        }
+        final int calculatedCost = userGetsFreeCertificates ? 0 : basicCost;
         // If the user has permission, discount is calculated which is based on the total basic cost so no pay is needed
         final String discountApplied = userGetsFreeCertificates ? Integer.toString(basicCost) : "0";
         final var itemCost = Integer.toString(basicCost);
