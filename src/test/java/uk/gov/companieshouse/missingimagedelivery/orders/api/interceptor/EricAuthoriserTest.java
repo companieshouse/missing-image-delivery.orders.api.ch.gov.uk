@@ -1,7 +1,9 @@
 package uk.gov.companieshouse.missingimagedelivery.orders.api.interceptor;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.util.TestConstants.ERIC_AUTHORISED_ROLES;
 
 
