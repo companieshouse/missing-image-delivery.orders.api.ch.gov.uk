@@ -51,6 +51,7 @@ public class MissingImageDeliveryItemServiceTest {
 
     public static final String FILING_HISTORY_CATEGORY = "resolution";
     private static final ProductType MISC_PRODUCT_TYPE = MISSING_IMAGE_DELIVERY_MISC;
+    private static final boolean USER_NOT_ELIGIBLE_FREE_CERTIFICATES = false;
 
     private static final ItemCosts ITEM_COSTS = new ItemCosts(DISCOUNT_APPLIED, MISSING_IMAGE_DELIVERY_ITEM_COST_STRING,
             CALCULATED_COST, MISSING_IMAGE_DELIVERY_MISC);
@@ -87,7 +88,7 @@ public class MissingImageDeliveryItemServiceTest {
         final MissingImageDeliveryItemOptions midItemOptions = new MissingImageDeliveryItemOptions(FILING_HISTORY_DATE,
                 FILING_HISTORY_DESCRIPTION, FILING_HISTORY_DESCRIPTION_VALUES, FILING_HISTORY_ID, FILING_HISTORY_TYPE,
                 FILING_HISTORY_CATEGORY, FILING_HISTORY_BARCODE);
-        when(costCalculatorService.calculateCosts(QUANTITY, MISC_PRODUCT_TYPE)).thenReturn(CALCULATION);
+        when(costCalculatorService.calculateCosts(QUANTITY, MISC_PRODUCT_TYPE, USER_NOT_ELIGIBLE_FREE_CERTIFICATES)).thenReturn(CALCULATION);
         MissingImageDeliveryItemData missingImageDeliveryItemData = new MissingImageDeliveryItemData();
         missingImageDeliveryItemData.setCompanyNumber(COMPANY_NUMBER);
         MissingImageDeliveryItem missingImageDeliveryItem = new MissingImageDeliveryItem();
@@ -101,7 +102,7 @@ public class MissingImageDeliveryItemServiceTest {
         final LocalDateTime intervalStart = LocalDateTime.now();
 
         // When
-        missingImageDeliveryItem = serviceUnderTest.createMissingImageDeliveryItem(missingImageDeliveryItem);
+        missingImageDeliveryItem = serviceUnderTest.createMissingImageDeliveryItem(missingImageDeliveryItem, USER_NOT_ELIGIBLE_FREE_CERTIFICATES);
 
         // Then
         final LocalDateTime intervalEnd = LocalDateTime.now();
@@ -111,7 +112,7 @@ public class MissingImageDeliveryItemServiceTest {
         verify(etagGenerator).generateEtag();
         verify(linksGenerator).generateLinks(ID);
         assertThat(missingImageDeliveryItem.getId(), is(ID));
-        verify(costCalculatorService).calculateCosts(QUANTITY, MISC_PRODUCT_TYPE);
+        verify(costCalculatorService).calculateCosts(QUANTITY, MISC_PRODUCT_TYPE, USER_NOT_ELIGIBLE_FREE_CERTIFICATES);
         verify(descriptionProviderService).getDescription(COMPANY_NUMBER);
         assertThat(missingImageDeliveryItem.getItemCosts(), is(singletonList(ITEM_COSTS)));
         assertThat(missingImageDeliveryItem.getPostageCost(), is(POSTAGE_COST));
@@ -128,5 +129,4 @@ public class MissingImageDeliveryItemServiceTest {
         assertThat(missingImageDeliveryItem.getItemOptions().getFilingHistoryBarcode(), is(FILING_HISTORY_BARCODE));
         verify(repository).save(missingImageDeliveryItem);
     }
-
 }

@@ -14,11 +14,9 @@ import static java.util.Collections.singletonList;
 @Service
 public class MissingImageDeliveryCostCalculatorService {
 
-    private static final String ZERO_DISCOUNT_APPLIED = "0";  // No rules have been devised for any MID discounting.
     private static final String ZERO_POSTAGE_COST = "0";      // Postage is not applicable to MID.
 
     private final CostsConfig costs;
-
     /**
      * Constructor.
      * @param costs the configured costs used by this in its calculations
@@ -27,17 +25,23 @@ public class MissingImageDeliveryCostCalculatorService {
 
     /**
      * Calculates the missing image delivery item costs.
-     * @param quantity the number of items
-     * @param productType product type based on category
+     *
+     * @param quantity                 the number of items
+     * @param productType              product type based on category
+     * @param userGetsFreeCertificates if user has permission admin/free-mids, return true
      * @return all of the relevant costs
      */
-    public ItemCostCalculation calculateCosts(final int quantity, final ProductType productType) {
+    public ItemCostCalculation calculateCosts(final int quantity, final ProductType productType, final boolean userGetsFreeCertificates) {
         checkArguments(quantity);
-        final int calculatedCost = costs.getMissingImageDeliveryItemCost();
-        final String totalItemCost = Integer.toString(quantity * calculatedCost);
+        final int basicCost = costs.getMissingImageDeliveryItemCost();
+        final int calculatedCost = userGetsFreeCertificates ? 0 : basicCost;
+        // If the user has permission, discount is calculated which is based on the total basic cost so no pay is needed
+        final String discountApplied = userGetsFreeCertificates ? Integer.toString(basicCost) : "0";
+        final var itemCost = Integer.toString(basicCost);
+        final var totalItemCost = Integer.toString(quantity * calculatedCost);
         return new ItemCostCalculation(
-                singletonList(new ItemCosts(ZERO_DISCOUNT_APPLIED,
-                        Integer.toString(costs.getMissingImageDeliveryItemCost()),
+                singletonList(new ItemCosts(discountApplied,
+                        itemCost,
                         Integer.toString(calculatedCost),
                         productType)),
                 ZERO_POSTAGE_COST,

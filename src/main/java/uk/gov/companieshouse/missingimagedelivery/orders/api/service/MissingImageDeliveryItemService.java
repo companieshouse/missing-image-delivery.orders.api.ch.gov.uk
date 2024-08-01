@@ -25,7 +25,6 @@ public class MissingImageDeliveryItemService {
     private final LinksGeneratorService linksGenerator;
     private final MissingImageDeliveryCostCalculatorService calculator;
     private final DescriptionProviderService descriptionProviderService;
-
     private static final String DESCRIPTION_IDENTIFIER = "missing-image-delivery";
     private static final String COMPANY_NUMBER_KEY = "company_number";
 
@@ -51,7 +50,7 @@ public class MissingImageDeliveryItemService {
      * @param item the item to be created
      * @return the created item
      */
-    public MissingImageDeliveryItem createMissingImageDeliveryItem(final MissingImageDeliveryItem item) {
+    public MissingImageDeliveryItem createMissingImageDeliveryItem(final MissingImageDeliveryItem item, final boolean userGetsFreeCertificates) {
         item.setId(idGenerator.autoGenerateId());
         setCreationDateTimes(item);
         item.setEtag(etagGenerator.generateEtag());
@@ -63,7 +62,7 @@ public class MissingImageDeliveryItemService {
         MissingImageDeliveryItemOptions itemOptions = item.getItemOptions();
         String category = itemOptions.getFilingHistoryCategory();
         ProductType productType = FilingHistoryCategory.enumValueOf(category).getProductType();
-        final ItemCostCalculation costs = calculator.calculateCosts(item.getQuantity(), productType);
+        final ItemCostCalculation costs = calculator.calculateCosts(item.getQuantity(), productType, userGetsFreeCertificates );
         item.setItemCosts(costs.getItemCosts());
         item.setPostageCost(costs.getPostageCost());
         item.setTotalItemCost(costs.getTotalItemCost());

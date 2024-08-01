@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemRequestDTO;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemResponseDTO;
+import uk.gov.companieshouse.missingimagedelivery.orders.api.interceptor.EricAuthoriser;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.mapper.MissingImageDeliveryItemMapper;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.MissingImageDeliveryItem;
@@ -28,11 +29,12 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
-import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.COMPANY_NUMBER_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.REQUEST_ID_HEADER_NAME;
+import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.USER_ID_LOG_KEY;
+import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.COMPANY_NUMBER_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.MISSING_IMAGE_DELIVERY_ID_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.STATUS_LOG_KEY;
-import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.USER_ID_LOG_KEY;
+
 
 @RestController
 public class MissingImageDeliveryItemController {
@@ -41,15 +43,18 @@ public class MissingImageDeliveryItemController {
     private final CompanyService companyService;
     private final MissingImageDeliveryItemService missingImageDeliveryItemService;
     private final FilingHistoryDocumentService filingHistoryDocumentService;
+    private final EricAuthoriser ericAuthoriser;
 
     public MissingImageDeliveryItemController(final MissingImageDeliveryItemMapper mapper,
                                         final CompanyService companyService,
                                         final MissingImageDeliveryItemService missingImageDeliveryItemService,
-                                        final FilingHistoryDocumentService filingHistoryDocumentService) {
+                                        final FilingHistoryDocumentService filingHistoryDocumentService,
+                                              final EricAuthoriser ericAuthoriser) {
         this.mapper = mapper;
         this.companyService = companyService;
         this.missingImageDeliveryItemService = missingImageDeliveryItemService;
         this.filingHistoryDocumentService = filingHistoryDocumentService;
+        this.ericAuthoriser = ericAuthoriser;
     }
 
     @PostMapping("${uk.gov.companieshouse.missingimagedelivery.orders.api.home}")
@@ -60,7 +65,7 @@ public class MissingImageDeliveryItemController {
 
         Map<String, Object> logMap = LoggingUtils.createLoggingDataMap(requestId);
         LoggingUtils.getLogger().infoRequest(request, "create missing image delivery item request", logMap);
-
+        final boolean entitledToFreeCertificates = ericAuthoriser.hasPermission("/admin/free-mids",  request);
         MissingImageDeliveryItem item = mapper.missingImageDeliveryItemRequestDTOtoMissingImageDeliveryItem(missingImageDeliveryItemRequestDTO);
 
         item.setUserId(EricHeaderHelper.getIdentity(request));
@@ -74,7 +79,7 @@ public class MissingImageDeliveryItemController {
 
         item.getData().setItemOptions(filing);
 
-        MissingImageDeliveryItem createdItem = missingImageDeliveryItemService.createMissingImageDeliveryItem(item);
+        var createdItem = missingImageDeliveryItemService.createMissingImageDeliveryItem(item, entitledToFreeCertificates);
 
         logMap.put(USER_ID_LOG_KEY, createdItem.getUserId());
         logMap.put(COMPANY_NUMBER_LOG_KEY, createdItem.getCompanyNumber());
