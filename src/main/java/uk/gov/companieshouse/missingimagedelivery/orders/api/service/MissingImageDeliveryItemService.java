@@ -28,6 +28,7 @@ public class MissingImageDeliveryItemService {
     private static final String DESCRIPTION_IDENTIFIER = "missing-image-delivery";
     private static final String COMPANY_NUMBER_KEY = "company_number";
 
+
     private static final String KIND = "item#missing-image-delivery";
 
     public MissingImageDeliveryItemService(final MissingImageDeliveryItemRepository repository,
@@ -69,6 +70,17 @@ public class MissingImageDeliveryItemService {
         return repository.save(item);
     }
 
+    public void populateItemCosts(final MissingImageDeliveryItem item,
+                                  final boolean userGetsFreeCertificates) {
+        MissingImageDeliveryItemOptions itemOptions = item.getItemOptions();
+        String category = itemOptions.getFilingHistoryCategory();
+        ProductType productType = FilingHistoryCategory.enumValueOf(category).getProductType();
+        final ItemCostCalculation costs = calculator.calculateCosts(item.getQuantity(), productType, userGetsFreeCertificates );
+        item.setItemCosts(costs.getItemCosts());
+        item.setPostageCost(costs.getPostageCost());
+        item.setTotalItemCost(costs.getTotalItemCost());
+    }
+
     private void populateDescriptions(final MissingImageDeliveryItem missingImageDeliveryItem) {
         String description = descriptionProviderService.getDescription(missingImageDeliveryItem.getData().getCompanyNumber());
         missingImageDeliveryItem.setDescriptionIdentifier(DESCRIPTION_IDENTIFIER);
@@ -98,5 +110,13 @@ public class MissingImageDeliveryItemService {
      */
     public Optional<MissingImageDeliveryItem> getMissingImageDeliveryItemById(String id) {
         return repository.findById(id);
+    }
+
+    public Optional<MissingImageDeliveryItem> getMissingImageDeliveryItemWithCosts(String id, final boolean userGetsFreeCertificates) {
+        Optional<MissingImageDeliveryItem>  retrievedItem = getMissingImageDeliveryItemById(id);
+
+        retrievedItem.ifPresent(item -> populateItemCosts(item, userGetsFreeCertificates));
+
+        return retrievedItem;
     }
 }

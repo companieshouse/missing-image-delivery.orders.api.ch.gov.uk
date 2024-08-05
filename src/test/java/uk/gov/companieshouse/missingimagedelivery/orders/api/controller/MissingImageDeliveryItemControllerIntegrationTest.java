@@ -245,6 +245,7 @@ class MissingImageDeliveryItemControllerIntegrationTest extends AbstractMongoCon
     void getMissingImageDeliveryItemSuccessfully() throws Exception {
         final MissingImageDeliveryItem item = newMissingImageDeliveryItem();
         repository.save(item);
+        when(calculatorService.calculateCosts(QUANTITY_1, ACCOUNTS_PRODUCT_TYPE, USER_NOT_ELIGIBLE_FREE_CERTIFICATES)).thenReturn(CALCULATION);
 
         final MissingImageDeliveryItemResponseDTO expectedItem = new MissingImageDeliveryItemResponseDTO();
         expectedItem.setCompanyNumber(item.getCompanyNumber());
@@ -258,6 +259,9 @@ class MissingImageDeliveryItemControllerIntegrationTest extends AbstractMongoCon
         expectedItem.setItemOptions(item.getItemOptions());
         expectedItem.setPostalDelivery(item.isPostalDelivery());
         expectedItem.setKind(item.getKind());
+        expectedItem.setItemCosts(CALCULATION.getItemCosts());
+        expectedItem.setPostageCost(CALCULATION.getPostageCost());
+        expectedItem.setTotalItemCost(CALCULATION.getTotalItemCost());
 
         // When and then
         mockMvc.perform(get(MISSING_IMAGE_DELIVERY_URL + "/" + item.getId())

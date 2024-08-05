@@ -29,11 +29,13 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
+import uk.gov.companieshouse.logging.Logger;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.REQUEST_ID_HEADER_NAME;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.USER_ID_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.COMPANY_NUMBER_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.MISSING_IMAGE_DELIVERY_ID_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.STATUS_LOG_KEY;
+import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.getLogger;
 
 
 @RestController
@@ -66,6 +68,8 @@ public class MissingImageDeliveryItemController {
         Map<String, Object> logMap = LoggingUtils.createLoggingDataMap(requestId);
         LoggingUtils.getLogger().infoRequest(request, "create missing image delivery item request", logMap);
         final boolean entitledToFreeCertificates = ericAuthoriser.hasPermission("/admin/free-mids",  request);
+        LoggingUtils.getLogger().info("User entitled to free certificates?: " + entitledToFreeCertificates);
+
         MissingImageDeliveryItem item = mapper.missingImageDeliveryItemRequestDTOtoMissingImageDeliveryItem(missingImageDeliveryItemRequestDTO);
 
         item.setUserId(EricHeaderHelper.getIdentity(request));
@@ -95,11 +99,15 @@ public class MissingImageDeliveryItemController {
 
     @GetMapping("${uk.gov.companieshouse.missingimagedelivery.orders.api.home}/{id}")
     public ResponseEntity<Object> getMissingImageDeliveryItem(final @PathVariable String id,
-                                                        final @RequestHeader(REQUEST_ID_HEADER_NAME) String requestId) {
+                                                        final @RequestHeader(REQUEST_ID_HEADER_NAME) String requestId,
+                                                              final HttpServletRequest servletRequest) {
         final Map<String, Object> logMap = LoggingUtils.createLoggingDataMap(requestId);
         logMap.put(MISSING_IMAGE_DELIVERY_ID_LOG_KEY, id);
         LoggingUtils.getLogger().info("get missing image delivery item request", logMap);
-        final Optional<MissingImageDeliveryItem> item = missingImageDeliveryItemService.getMissingImageDeliveryItemById(id);
+        final boolean entitledToFreeCertificates = ericAuthoriser.hasPermission("/admin/free-mids",  servletRequest);
+        LoggingUtils.getLogger().info("User entitled to free certificates?: " + entitledToFreeCertificates);
+
+        final Optional<MissingImageDeliveryItem> item = missingImageDeliveryItemService.getMissingImageDeliveryItemWithCosts(id,entitledToFreeCertificates);
         if (item.isPresent()) {
             final MissingImageDeliveryItemResponseDTO retrievedMissingImageDeliveryItemResponseDTO
                     = mapper.missingImageDeliveryItemToMissingImageDeliveryItemResponseDTO(item.get().getData());

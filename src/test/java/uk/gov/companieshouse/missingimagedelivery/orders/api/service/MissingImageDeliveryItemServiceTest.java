@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.companieshouse.missingimagedelivery.orders.api.interceptor.EricAuthoriser;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.ItemCostCalculation;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.ItemCosts;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.MissingImageDeliveryItem;
@@ -69,6 +70,9 @@ public class MissingImageDeliveryItemServiceTest {
 
     @Mock
     private IdGeneratorService idGeneratorService;
+
+    @Mock
+    EricAuthoriser authoriser;
 
     @Mock
     private MissingImageDeliveryItemRepository repository;
