@@ -29,13 +29,11 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
-import uk.gov.companieshouse.logging.Logger;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.REQUEST_ID_HEADER_NAME;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.USER_ID_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.COMPANY_NUMBER_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.MISSING_IMAGE_DELIVERY_ID_LOG_KEY;
 import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.STATUS_LOG_KEY;
-import static uk.gov.companieshouse.missingimagedelivery.orders.api.logging.LoggingUtils.getLogger;
 
 
 @RestController
