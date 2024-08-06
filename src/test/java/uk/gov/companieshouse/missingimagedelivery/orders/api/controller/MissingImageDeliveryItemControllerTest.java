@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.missingimagedelivery.orders.api.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.dto.MissingImageDeliveryItemResponseDTO;
+import uk.gov.companieshouse.missingimagedelivery.orders.api.interceptor.EricAuthoriser;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.mapper.MissingImageDeliveryItemMapper;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.MissingImageDeliveryItem;
 import uk.gov.companieshouse.missingimagedelivery.orders.api.model.MissingImageDeliveryItemData;
@@ -30,6 +32,12 @@ public class MissingImageDeliveryItemControllerTest {
     private MissingImageDeliveryItemController controllerUnderTest;
 
     @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private EricAuthoriser authoriser;
+
+    @Mock
     private MissingImageDeliveryItemService missingImageDeliveryItemService;
 
     @Mock
@@ -47,10 +55,10 @@ public class MissingImageDeliveryItemControllerTest {
     @Test
     @DisplayName("GET missing image delivery resource returns item")
     void getMissingImageDeliveryItemPresent() {
-        when(missingImageDeliveryItemService.getMissingImageDeliveryItemById(ID)).thenReturn(Optional.of(item));
+        when(missingImageDeliveryItemService.getMissingImageDeliveryItemWithCosts(ID, false)).thenReturn(Optional.of(item));
         when(item.getData()).thenReturn(data);
         when(mapper.missingImageDeliveryItemToMissingImageDeliveryItemResponseDTO(data)).thenReturn(dto);
-        ResponseEntity<Object> response = controllerUnderTest.getMissingImageDeliveryItem(ID, REQUEST_ID_VALUE);
+        ResponseEntity<Object> response = controllerUnderTest.getMissingImageDeliveryItem(ID, REQUEST_ID_VALUE, request);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(response.getBody(), is(dto));
@@ -59,8 +67,8 @@ public class MissingImageDeliveryItemControllerTest {
     @Test
     @DisplayName("Get missing image delivery resource returns HTTP NOT FOUND")
     void getMissingImageDeliveryItemNotFound() {
-        when(missingImageDeliveryItemService.getMissingImageDeliveryItemById(ID)).thenReturn(Optional.empty());
-        ResponseEntity<Object> response = controllerUnderTest.getMissingImageDeliveryItem(ID, REQUEST_ID_VALUE);
+        when(missingImageDeliveryItemService.getMissingImageDeliveryItemWithCosts(ID, false)).thenReturn(Optional.empty());
+        ResponseEntity<Object> response = controllerUnderTest.getMissingImageDeliveryItem(ID, REQUEST_ID_VALUE, request);
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
     }
