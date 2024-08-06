@@ -74,7 +74,7 @@ public class MissingImageDeliveryItemService {
                                   final boolean userGetsFreeCertificates) {
         MissingImageDeliveryItemOptions itemOptions = item.getItemOptions();
         String category = itemOptions.getFilingHistoryCategory();
-        ProductType productType = FilingHistoryCategory.enumValueOf(category).getProductType();
+        var productType = FilingHistoryCategory.enumValueOf(category).getProductType();
         final ItemCostCalculation costs = calculator.calculateCosts(item.getQuantity(), productType, userGetsFreeCertificates );
         item.setItemCosts(costs.getItemCosts());
         item.setPostageCost(costs.getPostageCost());
