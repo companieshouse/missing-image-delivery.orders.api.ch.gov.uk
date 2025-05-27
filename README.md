@@ -4,7 +4,7 @@
 API handling CRUD operations on CH Missing Image Delivery Ordering Service
 
 ### Requirements
-* [Java 8][1]
+* [Java 21][1]
 * [Maven][2]
 * [Git][3]
 
