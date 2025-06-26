@@ -1,5 +1,0 @@
-app_name: missing-image-delivery.orders.api.ch.gov.uk
-group: api
-weight: 991
-routes:
-   1: ^/orderable/missing-image-deliveries.*
