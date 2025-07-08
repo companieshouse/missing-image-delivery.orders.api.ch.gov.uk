@@ -23,6 +23,7 @@ import com.github.tomakehurst.wiremock.http.Fault;
 import java.time.LocalDate;
 import java.util.Collections;
 import org.hamcrest.core.Is;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +32,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -103,10 +103,10 @@ class FilingHistoryDocumentServiceIntegrationTest {
     @Autowired
     private Environment environment;
 
-    @MockBean
+    @MockitoBean
     private MissingImageDeliveryItemService missingImageDeliveryItemService;
 
-    @MockBean
+    @MockitoBean
     private MissingImageDeliveryCostCalculatorService missingImageDeliveryCostCalculatorService;
 
     @SystemStub
