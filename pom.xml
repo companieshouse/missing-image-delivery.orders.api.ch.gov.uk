@@ -21,7 +21,7 @@
         <!--- CH -->
         <api-helper-java.version>3.0.1</api-helper-java.version>
         <api-sdk-java.version>6.3.1</api-sdk-java.version>
-        <api-sdk-manager-java-library.version>3.0.6</api-sdk-manager-java-library.version>
+        <api-sdk-manager-java-library.version>3.0.11</api-sdk-manager-java-library.version>
         <api-security-java.version>2.0.8</api-security-java.version>
         <structured-logging.version>3.0.32</structured-logging.version>
         <commons.lang.version>3.19.0</commons.lang.version>
@@ -334,6 +334,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <environmentVariables>
+                        <ORACLE_QUERY_API_URL>http://oracle.testApiUrl.com</ORACLE_QUERY_API_URL>
+                    </environmentVariables>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
