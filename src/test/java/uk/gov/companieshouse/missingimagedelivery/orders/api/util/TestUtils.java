@@ -21,6 +21,7 @@ public class TestUtils {
         variables.set("CHS_API_KEY", "MGQ1MGNlYmFkYzkxZTM2MzlkNGVmMzg4ZjgxMmEz");
         variables.set("API_URL", "http://localhost:" + wireMockPort);
         variables.set("PAYMENTS_API_URL", "http://localhost:" + wireMockPort);
+        variables.set("ORACLE_QUERY_API_URL", "http://oracle.testApiUrl.com");
         return wireMockPort;
     }
     /**

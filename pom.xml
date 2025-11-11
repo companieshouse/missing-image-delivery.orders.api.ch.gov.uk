@@ -334,11 +334,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <environmentVariables>
-                        <ORACLE_QUERY_API_URL>http://oracle.testApiUrl.com</ORACLE_QUERY_API_URL>
-                    </environmentVariables>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
