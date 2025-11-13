@@ -63,8 +63,6 @@
 		<sonar.java.binaries>
 			${project.basedir}/target
 		</sonar.java.binaries>
-
-                <ORACLE_QUERY_API_URL>http://oracle.testApiUrl.com</ORACLE_QUERY_API_URL>
     </properties>
 
     <dependencyManagement>
