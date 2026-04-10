@@ -23,7 +23,7 @@
         <api-sdk-java.version>6.6.13</api-sdk-java.version>
         <api-sdk-manager-java-library.version>3.0.18</api-sdk-manager-java-library.version>
         <api-security-java.version>2.0.26</api-security-java.version>
-        <structured-logging.version>3.0.32</structured-logging.version>
+        <structured-logging.version>3.0.52</structured-logging.version>
 
         <!--- Miscellaneous -->
         <commons.lang.version>3.19.0</commons.lang.version>
@@ -45,7 +45,7 @@
 
         <!-- Docker Properties -->
         <jib-maven-plugin.version>3.4.6</jib-maven-plugin.version>
-        <test-containers.version>1.21.2</test-containers.version>
+        <test-containers.version>2.0.4</test-containers.version>
 
         <!-- Sonar -->
         <sonar-maven-plugin.version>5.1.0.4751</sonar-maven-plugin.version>
