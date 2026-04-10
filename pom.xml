@@ -40,7 +40,7 @@
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
-        <open-telemetry.version>2.14.0</open-telemetry.version>
+        <open-telemetry.version>2.26.1</open-telemetry.version>
         <system-stubs.version>2.1.6</system-stubs.version>
 
         <!-- Docker Properties -->
@@ -75,6 +75,13 @@
                 <groupId>io.opentelemetry.instrumentation</groupId>
                 <artifactId>opentelemetry-instrumentation-bom</artifactId>
                 <version>${open-telemetry.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${test-containers.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -210,15 +217,7 @@
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers-bom</artifactId>
-            <version>${test-containers.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
             <artifactId>mongodb</artifactId>
-            <version>${test-containers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
