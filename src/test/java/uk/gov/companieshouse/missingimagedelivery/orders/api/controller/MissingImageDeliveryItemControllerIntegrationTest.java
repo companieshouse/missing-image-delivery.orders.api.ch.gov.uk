@@ -43,8 +43,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.verifyZeroInteractions;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -351,7 +351,7 @@ class MissingImageDeliveryItemControllerIntegrationTest extends AbstractMongoCon
                 .content(objectMapper.writeValueAsString(missingImageDeliveryItemDTORequest)))
                 .andExpect(status().isUnauthorized());
 
-        verifyZeroInteractions(idGeneratorService);
+        verifyNoInteractions(idGeneratorService);
 
     }
 

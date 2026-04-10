@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.companieshouse.api.InternalApiClient;
 import uk.gov.companieshouse.api.handler.company.CompanyResourceHandler;
@@ -31,7 +30,6 @@ import static uk.gov.companieshouse.api.error.ApiErrorResponseException.fromHttp
 import static uk.gov.companieshouse.api.error.ApiErrorResponseException.fromIOException;
 
 @ExtendWith(MockitoExtension.class)
-@PrepareForTest(HttpResponseException.class)
 public class CompanyServiceTest {
 
     private static final String COMPANY_NUMBER = "00006400";

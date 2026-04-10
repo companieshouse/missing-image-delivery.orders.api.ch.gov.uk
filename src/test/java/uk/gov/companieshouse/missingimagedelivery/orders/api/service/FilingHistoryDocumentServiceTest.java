@@ -1,20 +1,11 @@
 package uk.gov.companieshouse.missingimagedelivery.orders.api.service;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static uk.gov.companieshouse.api.error.ApiErrorResponseException.fromIOException;
-
-import com.google.api.client.http.HttpResponseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.companieshouse.api.InternalApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
@@ -26,11 +17,17 @@ import uk.gov.companieshouse.api.model.filinghistory.FilingApi;
 
 import java.io.IOException;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static uk.gov.companieshouse.api.error.ApiErrorResponseException.fromIOException;
+
 /**
  * Unit tests the {@link FilingHistoryDocumentService} class.
  */
 @ExtendWith(MockitoExtension.class)
-@PrepareForTest(HttpResponseException.class)
 public class FilingHistoryDocumentServiceTest {
 
     private static final String COMPANY_NUMBER = "00006400";

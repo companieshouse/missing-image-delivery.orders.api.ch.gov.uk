@@ -32,7 +32,6 @@
         <system-rules.version>1.17.2</system-rules.version>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
         <snakeyaml.version>2.4</snakeyaml.version>
-        <powermock.version>2.0.9</powermock.version>
         <hamcrest.version>3.0</hamcrest.version>
         <spring-cloud-contract-wiremock.version>4.3.0</spring-cloud-contract-wiremock.version>
         <mockito-junit-jupiter.version>5.18.0</mockito-junit-jupiter.version>
@@ -193,18 +192,6 @@
             <artifactId>structured-logging</artifactId>
             <version>${structured-logging.version}</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito2</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.stefanbirkner</groupId>
