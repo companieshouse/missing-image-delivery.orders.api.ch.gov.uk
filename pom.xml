@@ -16,14 +16,15 @@
 
     <properties>
         <java.version>21</java.version>
-        <spring-boot-dependencies.version>3.5.7</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>3.5.15</spring-boot-dependencies.version>
+        <plexus-utils.version>3.6.1</plexus-utils.version>
 
         <!--- CH -->
         <api-helper-java.version>3.0.1</api-helper-java.version>
         <api-sdk-java.version>6.3.1</api-sdk-java.version>
         <api-sdk-manager-java-library.version>3.0.14</api-sdk-manager-java-library.version>
         <api-security-java.version>2.0.8</api-security-java.version>
-        <structured-logging.version>3.0.32</structured-logging.version>
+        <structured-logging.version>3.0.57</structured-logging.version>
         <commons.lang.version>3.19.0</commons.lang.version>
         <guava.version>33.4.8-jre</guava.version>
         <gson.version>2.13.1</gson.version>
@@ -39,8 +40,11 @@
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
-        <open-telemetry.version>2.14.0</open-telemetry.version>
+        <open-telemetry.version>2.29.0</open-telemetry.version>
         <system-stubs.version>2.1.6</system-stubs.version>
+        <kotlin-stdlib.version>2.1.21</kotlin-stdlib.version>
+        <log4j.version>2.25.4</log4j.version>
+        <log4j-to-slf4j.version>2.25.4</log4j-to-slf4j.version>
         <!-- Docker property -->
         <jib-maven-plugin.version>3.4.6</jib-maven-plugin.version>
         <test-containers.version>1.21.2</test-containers.version>
@@ -67,6 +71,29 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Security: override log4j dependencies to fix CVE-2026-34477, CVE-2026-34479 -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-to-slf4j</artifactId>
+                <version>${log4j-to-slf4j.version}</version>
+            </dependency>
+            <!-- Security: override plexus-utils to fix CVE-2025-67030 -->
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-utils</artifactId>
+                <version>${plexus-utils.version}</version>
+            </dependency>
+            <!-- Security: override kotlin-stdlib to avoid flagged CVE on 1.9.25 -->
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib</artifactId>
+                <version>${kotlin-stdlib.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.opentelemetry.instrumentation</groupId>
                 <artifactId>opentelemetry-instrumentation-bom</artifactId>
