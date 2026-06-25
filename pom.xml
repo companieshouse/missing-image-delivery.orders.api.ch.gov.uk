@@ -17,6 +17,7 @@
     <properties>
         <java.version>21</java.version>
         <spring-boot-dependencies.version>3.5.15</spring-boot-dependencies.version>
+        <plexus-utils.version>3.6.1</plexus-utils.version>
 
         <!--- CH -->
         <api-helper-java.version>3.0.1</api-helper-java.version>
@@ -85,7 +86,7 @@
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-utils</artifactId>
-                <version>3.6.1</version>
+                <version>${plexus-utils.version}</version>
             </dependency>
             <!-- Security: override kotlin-stdlib to avoid flagged CVE on 1.9.25 -->
             <dependency>
